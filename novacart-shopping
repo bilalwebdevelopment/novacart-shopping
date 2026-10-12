@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaCart | Online Shopping</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--dark:#111;--accent:#a3e635;--light:#f7f7f5}
+body{font-family:Arial,sans-serif;background:var(--light);color:var(--dark)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.topbar{background:#111;color:white;text-align:center;padding:10px;font-size:12px;letter-spacing:1px}
+header{display:flex;align-items:center;justify-content:space-between;padding:22px 6%;background:white;gap:18px;flex-wrap:wrap}
+.logo{font-size:27px;font-weight:900;letter-spacing:-1px}
+.logo span{color:#65a30d}
+.search{display:flex;flex:1;max-width:440px}
+.search input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px 0 0 8px;outline:none}
+.search button{background:var(--dark);color:white;border:0;padding:12px 17px;border-radius:0 8px 8px 0}
+.cart-btn{border:1px solid #ddd;background:white;padding:11px 15px;border-radius:8px;font-weight:bold}
+nav{display:flex;justify-content:center;gap:30px;padding:16px;background:white;border-top:1px solid #eee;flex-wrap:wrap}
+nav a{color:#333;text-decoration:none;font-size:14px}
+nav a:hover{color:#65a30d}
+.hero{margin:25px auto;width:90%;max-width:1400px;min-height:340px;background:#171717;color:white;border-radius:18px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;padding:50px 7%;gap:25px}
+.hero-content{max-width:530px}
+.tag{display:inline-block;background:var(--accent);color:#111;padding:7px 12px;border-radius:30px;font-size:11px;font-weight:bold;margin-bottom:20px}
+.hero h1{font-size:clamp(36px,5vw,64px);line-height:1.05;letter-spacing:-2px;margin-bottom:18px}
+.hero p{color:#ccc;line-height:1.7;margin-bottom:25px}
+.primary{background:var(--accent);color:#111;border:0;padding:14px 22px;border-radius:8px;font-weight:bold}
+.hero-art{font-size:clamp(100px,18vw,210px);filter:drop-shadow(0 10px 20px #555);transform:rotate(-12deg)}
+.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;width:88%;max-width:1250px;margin:30px auto}
+.benefit{background:white;padding:20px;border-radius:12px;text-align:center}
+.benefit b{display:block;margin:8px 0}
+.benefit p{font-size:12px;color:#777}
+.section{width:90%;max-width:1400px;margin:50px auto}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px;flex-wrap:wrap}
+.section-head h2{font-size:30px;letter-spacing:-1px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:25px}
+.filter{padding:10px 16px;border:1px solid #ddd;background:white;border-radius:30px}
+.filter.active,.filter:hover{background:#111;color:white}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.product{background:white;border-radius:14px;overflow:hidden;border:1px solid #eee;transition:.2s}
+.product:hover{transform:translateY(-4px);box-shadow:0 12px 30px #0000000c}
+.product-img{height:210px;position:relative;background:#eee;overflow:hidden}
+.product-img img{width:100%;height:100%;object-fit:cover;transition:.3s}
+.product:hover .product-img img{transform:scale(1.05)}
+.pill{position:absolute;top:12px;left:12px;background:white;padding:6px 9px;border-radius:20px;font-size:10px;font-weight:bold}
+.heart{position:absolute;right:12px;top:12px;border:0;background:white;border-radius:50%;width:34px;height:34px;font-size:19px}
+.product-info{padding:16px}
+.category{font-size:11px;color:#777;text-transform:uppercase;letter-spacing:1px}
+.product h3{font-size:16px;margin:9px 0}
+.rating{color:#b7791f;font-size:12px}
+.price-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:15px}
+.price{font-weight:900;font-size:18px}
+.add{background:#111;color:white;border:0;border-radius:7px;padding:10px 12px}
+.add:hover{background:#65a30d;color:#111}
+.empty{grid-column:1/-1;text-align:center;padding:50px;color:#777}
+.newsletter{background:#e8eddf;padding:45px 20px;text-align:center;border-radius:16px}
+.newsletter h2{font-size:28px;margin-bottom:12px}
+.newsletter p{color:#555;margin-bottom:20px}
+.newsletter form{display:flex;max-width:430px;margin:auto;gap:8px}
+.newsletter input{min-width:0;flex:1;padding:13px;border:1px solid #ddd;border-radius:7px}
+.newsletter button{border:0;background:#111;color:white;padding:13px;border-radius:7px}
+footer{margin-top:55px;background:#111;color:white;padding:40px 6%}
+.footer-row{display:flex;justify-content:space-between;gap:25px;flex-wrap:wrap}
+footer p{color:#aaa;font-size:13px;line-height:1.8;margin-top:10px}
+footer a{color:#ddd;text-decoration:none;font-size:13px;display:block;margin-top:10px}
+.copyright{border-top:1px solid #333;margin-top:30px;padding-top:20px;font-size:12px;color:#999}
+.overlay{position:fixed;inset:0;background:#0008;z-index:10;display:none}
+.overlay.show{display:block}
+.drawer{position:fixed;right:0;top:0;height:100%;width:min(430px,100%);background:white;z-index:11;transform:translateX(100%);transition:.3s;padding:25px;display:flex;flex-direction:column}
+.drawer.show{transform:translateX(0)}
+.drawer-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:20px;border-bottom:1px solid #eee}
+.close{border:0;background:#eee;border-radius:50%;width:35px;height:35px}
+.cart-items{flex:1;overflow:auto}
+.cart-item{display:flex;gap:13px;padding:18px 0;border-bottom:1px solid #eee}
+.cart-item img{width:80px;height:85px;object-fit:cover;border-radius:8px}
+.cart-item h4{margin-bottom:8px}
+.qty{display:flex;align-items:center;gap:12px;margin-top:10px}
+.qty button{width:25px;height:25px;border:1px solid #ddd;background:white;border-radius:5px}
+.cart-bottom{border-top:1px solid #ddd;padding-top:20px}
+.total{display:flex;justify-content:space-between;font-size:19px;font-weight:bold;margin-bottom:18px}
+.checkout{width:100%;padding:15px;background:#111;color:white;border:0;border-radius:8px;font-weight:bold}
+.checkout:disabled{opacity:.5;cursor:not-allowed}
+.modal{display:none;position:fixed;z-index:20;inset:0;background:#0009;align-items:center;justify-content:center;padding:15px}
+.modal.show{display:flex}
+.modal-box{background:white;width:min(480px,100%);max-height:90vh;overflow:auto;padding:25px;border-radius:14px}
+.modal-box h2{margin-bottom:10px}
+.modal-box p{font-size:13px;color:#666;margin-bottom:18px;line-height:1.5}
+.modal-box label{display:block;font-size:13px;margin:13px 0 6px}
+.modal-box input,.modal-box textarea,.modal-box select{width:100%;padding:12px;border:1px solid #ddd;border-radius:7px}
+.modal-box textarea{resize:vertical}
+.modal-actions{display:flex;gap:10px;margin-top:20px}
+.modal-actions button{flex:1;padding:13px;border-radius:7px}
+.cancel{border:1px solid #ddd;background:white}
+.success{text-align:center;padding:30px 10px}
+.success div{font-size:55px;margin-bottom:15px}
+@media(max-width:950px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero-art{font-size:130px}}
+@media(max-width:650px){header{padding:18px 5%}.logo{font-size:23px}.search{order:3;max-width:none;flex-basis:100%}.hero{padding:35px 25px;min-height:290px}.hero-art{font-size:85px}.hero h1{font-size:38px}.benefits{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product-img{height:155px}.product-info{padding:11px}.product h3{font-size:14px}.price{font-size:15px}.add{padding:9px}.section-head h2{font-size:25px}.section{width:92%}.hero{width:92%}.newsletter form{flex-direction:column}}
+@media(max-width:360px){.hero-art{display:none}.grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">✨ WELCOME TO NOVACART — YOUR STYLE, YOUR CHOICE</div>
+
+<header>
+  <div class="logo">Nova<span>Cart.</span></div>
+  <form class="search" id="searchForm">
+    <input id="searchInput" type="search" placeholder="Search products..." aria-label="Search products">
+    <button type="submit">Search</button>
+  </form>
+  <button class="cart-btn" id="openCart">🛒 Cart (<span id="cartCount">0</span>)</button>
+</header>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#products">All Products</a>
+  <a href="#products" data-nav="Fashion">Fashion</a>
+  <a href="#products" data-nav="Electronics">Electronics</a>
+  <a href="#products" data-nav="Accessories">Accessories</a>
+</nav>
+
+<main>
+<section class="hero" id="home">
+  <div class="hero-content">
+    <span class="tag">NEW COLLECTION 2026</span>
+    <h1>Shopping made<br>simple.</h1>
+    <p>Discover your next favourite thing. Explore quality products, fresh styles and everyday essentials.</p>
+    <button class="primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Explore Products →</button>
+  </div>
+  <div class="hero-art" aria-hidden="true">🛍️</div>
+</section>
+
+<section class="benefits">
+  <div class="benefit"><span>🚚</span><b>Easy Shopping</b><p>A simple and smooth shopping experience</p></div>
+  <div class="benefit"><span>💎</span><b>Handpicked Products</b><p>Discover products for every day</p></div>
+  <div class="benefit"><span>🔒</span><b>Shop With Confidence</b><p>Clear prices and order details</p></div>
+</section>
+
+<section class="section" id="products">
+  <div class="section-head">
+    <div><span class="category">THE NOVACART COLLECTION</span><h2>Explore Products</h2></div>
+    <span id="resultCount"></span>
+  </div>
+  <div class="filters" id="filters">
+    <button class="filter active" data-category="All">All Products</button>
+    <button class="filter" data-category="Fashion">Fashion</button>
+    <button class="filter" data-category="Electronics">Electronics</button>
+    <button class="filter" data-category="Accessories">Accessories</button>
+    <button class="filter" data-category="Home">Home</button>
+  </div>
+  <div class="grid" id="productGrid"></div>
+</section>
+
+<section class="section">
+  <div class="newsletter">
+    <h2>Stay in the loop ✨</h2>
+    <p>Get updates about new arrivals and special offers.</p>
+    <form id="newsletterForm">
+      <input type="email" placeholder="Enter your email address" required>
+      <button type="submit">Subscribe</button>
+    </form>
+    <p id="newsletterMessage" role="status" style="margin-top:12px"></p>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="footer-row">
+    <div><div class="logo">Nova<span>Cart.</span></div><p>Your everyday shopping destination.<br>Discover more. Shop smarter.</p></div>
+    <div><b>Quick Links</b><a href="#home">Home</a><a href="#products">Shop All</a><a href="#products">New Arrivals</a></div>
+    <div><b>Customer Care</b><a href="mailto:hello@example.com">Contact Us</a><a href="#products">Browse Products</a><p>Replace the demo contact with your store details.</p></div>
+  </div>
+  <div class="copyright">© 2026 NovaCart. All rights reserved.</div>
+</footer>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="cartDrawer" aria-label="Shopping cart">
+  <div class="drawer-head"><h2>Your Cart 🛒</h2><button class="close" id="closeCart" aria-label="Close cart">✕</button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-bottom">
+    <div class="total"><span>Total</span><span id="cartTotal">Rs 0</span></div>
+    <button class="checkout" id="checkoutBtn">Proceed to Checkout →</button>
+    <p style="font-size:11px;color:#888;margin-top:12px">Demo store. No payment is processed.</p>
+  </div>
+</aside>
+
+<div class="modal" id="checkoutModal">
+  <div class="modal-box" id="checkoutContent">
+    <h2>Complete Your Order</h2>
+    <p>Enter your details to create a demo order.</p>
+    <form id="checkoutForm">
+      <label for="customerName">Full name</label>
+      <input id="customerName" required placeholder="Your full name">
+      <label for="customerPhone">Phone number</label>
+      <input id="customerPhone" required type="tel" placeholder="03XXXXXXXXX">
+      <label for="customerAddress">Delivery address</label>
+      <textarea id="customerAddress" required rows="3" placeholder="House, street, city"></textarea>
+      <label for="paymentMethod">Payment method</label>
+      <select id="paymentMethod"><option>Cash on Delivery (Demo)</option><option>Online Payment (Not Enabled)</option></select>
+      <div class="modal-actions">
+        <button type="button" class="cancel" id="cancelCheckout">Cancel</button>
+        <button class="checkout" type="submit">Place Demo Order</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const products = [
+ {id:1,name:"Classic Sneakers",category:"Fashion",price:3499,rating:"4.8",badge:"POPULAR",emoji:"👟",image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80"},
+ {id:2,name:"Wireless Headphones",category:"Electronics",price:4299,rating:"4.9",badge:"BESTSELLER",emoji:"🎧",image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"},
+ {id:3,name:"Minimal Watch",category:"Accessories",price:2799,rating:"4.7",badge:"TRENDING",emoji:"⌚",image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80"},
+ {id:4,name:"Everyday Backpack",category:"Fashion",price:2199,rating:"4.6",badge:"NEW",emoji:"🎒",image:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=80"},
+ {id:5,name:"Smart Camera",category:"Electronics",price:8999,rating:"4.8",badge:"FEATURED",emoji:"📷",image:"https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80"},
+ {id:6,name:"Premium Sunglasses",category:"Accessories",price:1599,rating:"4.5",badge:"STYLE PICK",emoji:"🕶️",image:"https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=600&q=80"},
+ {id:7,name:"Soft Table Lamp",category:"Home",price:1899,rating:"4.7",badge:"HOME PICK",emoji:"💡",image:"https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=600&q=80"},
+ {id:8,name:"Travel Water Bottle",category:"Home",price:999,rating:"4.6",badge:"EVERYDAY",emoji:"🧴",image:"https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=600&q=80"}
+];
+
+let selectedCategory = "All";
+let searchText = "";
+let cart = {};
+let wishlist = new Set();
+
+const money = n => "Rs " + n.toLocaleString("en-PK");
+
+function renderProducts(){
+ const filtered = products.filter(p =>
+  (selectedCategory === "All" || p.category === selectedCategory) &&
+  p.name.toLowerCase().includes(searchText.toLowerCase())
+ );
+ document.getElementById("resultCount").textContent = filtered.length + " products";
+ document.getElementById("productGrid").innerHTML = filtered.length ? filtered.map(p => `
+  <article class="product">
+   <div class="product-img">
+    <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.style.background='#e8eddf';this.parentElement.insertAdjacentHTML('beforeend','<span style=font-size:65px;display:grid;place-items:center;height:100%>${p.emoji}</span>')">
+    <span class="pill">${p.badge}</span>
+    <button class="heart" aria-label="Toggle wishlist for ${p.name}" onclick="toggleWish(${p.id})">${wishlist.has(p.id)?"❤️":"♡"}</button>
+   </div>
+   <div class="product-info">
+    <div class="category">${p.category}</div>
+    <h3>${p.name}</h3>
+    <div class="rating">★ ${p.rating} <span style="color:#888">customer rating</span></div>
+    <div class="price-row">
+     <span class="price">${money(p.price)}</span>
+     <button class="add" onclick="addToCart(${p.id})">+ Add</button>
+    </div>
+   </div>
+  </article>`).join("") : '<div class="empty">No products found. Try another search.</div>';
+ document.querySelectorAll(".filter").forEach(b => b.classList.toggle("active", b.dataset.category === selectedCategory));
+}
+
+function toggleWish(id){
+ if(wishlist.has(id)) wishlist.delete(id); else wishlist.add(id);
+ renderProducts();
+}
+function addToCart(id){
+ cart[id] = (cart[id] || 0) + 1;
+ renderCart();
+}
+function changeQty(id,delta){
+ cart[id] = (cart[id] || 0) + delta;
+ if(cart[id] <= 0) delete cart[id];
+ renderCart();
+}
+function renderCart(){
+ const entries = Object.entries(cart);
+ const count = entries.reduce((sum,[id,qty]) => sum + qty,0);
+ const total = entries.reduce((sum,[id,qty]) => sum + products.find(p=>p.id===Number(id)).price*qty,0);
+ document.getElementById("cartCount").textContent = count;
+ document.getElementById("cartTotal").textContent = money(total);
+ document.getElementById("cartItems").innerHTML = entries.length ? entries.map(([id,qty])=>{
+  const p = products.find(x=>x.id===Number(id));
+  return `<div class="cart-item">
+   <img src="${p.image}" alt="${p.name}" onerror="this.style.display='none'">
+   <div style="flex:1"><h4>${p.name}</h4><b>${money(p.price)}</b>
+    <div class="qty">
+     <button onclick="changeQty(${p.id},-1)" aria-label="Decrease quantity">−</button>
+     <span>${qty}</span>
+     <button onclick="changeQty(${p.id},1)" aria-label="Increase quantity">+</button>
+    </div>
+   </div>
+  </div>`;
+ }).join("") : '<div class="empty">Your cart is empty 🛒<br>Add something you love!</div>';
+ document.getElementById("checkoutBtn").disabled = count === 0;
+}
+function openCart(){
+ document.getElementById("overlay").classList.add("show");
+ document.getElementById("cartDrawer").classList.add("show");
+}
+function closeCart(){
+ document.getElementById("overlay").classList.remove("show");
+ document.getElementById("cartDrawer").classList.remove("show");
+}
+document.getElementById("filters").addEventListener("click",e=>{
+ const b=e.target.closest("[data-category]");
+ if(!b)return;
+ selectedCategory=b.dataset.category;
+ renderProducts();
+});
+document.querySelectorAll("[data-nav]").forEach(a=>a.addEventListener("click",()=>{
+ selectedCategory=a.dataset.nav;renderProducts();
+}));
+document.getElementById("searchForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ searchText=document.getElementById("searchInput").value.trim();
+ renderProducts();
+ document.getElementById("products").scrollIntoView({behavior:"smooth"});
+});
+document.getElementById("searchInput").addEventListener("input",e=>{
+ searchText=e.target.value.trim();renderProducts();
+});
+document.getElementById("openCart").addEventListener("click",openCart);
+document.getElementById("closeCart").addEventListener("click",closeCart);
+document.getElementById("overlay").addEventListener("click",closeCart);
+document.getElementById("checkoutBtn").addEventListener("click",()=>{
+ if(!Object.keys(cart).length)return;
+ closeCart();
+ document.getElementById("checkoutModal").classList.add("show");
+});
+document.getElementById("cancelCheckout").addEventListener("click",()=>{
+ document.getElementById("checkoutModal").classList.remove("show");
+});
+document.getElementById("checkoutForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const orderId = "NC" + Date.now().toString().slice(-7);
+ const name = document.getElementById("customerName").value.trim();
+ const total = Object.entries(cart).reduce((s,[id,q])=>s+products.find(p=>p.id===Number(id)).price*q,0);
+ document.getElementById("checkoutContent").innerHTML=`
+  <div class="success">
+   <div>✅</div><h2>Demo Order Created!</h2>
+   <p>Thank you, ${name.replace(/[&<>"']/g,"")}. Your demo order reference is <b>${orderId}</b>.</p>
+   <p>Total: <b>${money(total)}</b></p>
+   <p>This is a front-end demonstration. No order was sent to a shop and no payment was taken.</p>
+   <button class="checkout" id="finishOrder">Continue Shopping</button>
+  </div>`;
+ document.getElementById("finishOrder").addEventListener("click",()=>{
+  cart={};renderCart();
+  document.getElementById("checkoutModal").classList.remove("show");
+  document.getElementById("checkoutContent").innerHTML=originalCheckout;
+  location.hash="#products";
+ });
+});
+const originalCheckout=document.getElementById("checkoutContent").innerHTML;
+document.getElementById("newsletterForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ document.getElementById("newsletterMessage").textContent="Thanks for your interest! Demo subscription only.";
+ e.target.reset();
+});
+document.getElementById("checkoutModal").addEventListener("click",e=>{
+ if(e.target.id==="checkoutModal")e.currentTarget.classList.remove("show");
+});
+renderProducts();
+renderCart();
+</script>
+</body>
+</html>
